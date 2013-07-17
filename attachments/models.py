@@ -31,6 +31,7 @@ class Attachment(models.Model):
     created = models.DateTimeField(_('created'), auto_now_add=True)
     modified = models.DateTimeField(_('modified'), auto_now=True)
     title = models.CharField(_('title'), max_length=200, blank=True, default='')
+    description = models.TextField(_('description'), max_length=1000, blank=True, default='')
 
     class Meta:
         ordering = ['-created']
