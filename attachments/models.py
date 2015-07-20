@@ -26,7 +26,8 @@ class Attachment(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('content_type', 'object_id')
-    creator = models.ForeignKey(User, related_name="created_attachments", verbose_name=_('creator'))
+    creator = models.ForeignKey(User, related_name="created_attachments",
+        verbose_name=_('creator'), on_delete=models.SET(1))
     attachment_file = models.FileField(_('attachment'), upload_to=attachment_upload,
         max_length=200)
     created = models.DateTimeField(_('created'), auto_now_add=True)
