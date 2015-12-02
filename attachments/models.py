@@ -6,14 +6,16 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-# From https://github.com/etianen/django-reversion/pull/206/files
+
 UserModel = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
 
 class AttachmentManager(models.Manager):
     def attachments_for_object(self, obj):
         object_type = ContentType.objects.get_for_model(obj)
         return self.filter(content_type__pk=object_type.id,
                            object_id=obj.id)
+
 
 class Attachment(models.Model):
     def attachment_upload(instance, filename):
@@ -39,7 +41,7 @@ class Attachment(models.Model):
     description = models.TextField(_('description'), max_length=1000, blank=True, default='')
 
     class Meta:
-        app_label = ugettext("attachment")
+        app_label = ugettext('attachments')
         ordering = ['-created']
         permissions = (
             ('delete_foreign_attachments', 'Can delete foreign attachments'),

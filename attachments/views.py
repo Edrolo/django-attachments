@@ -1,7 +1,7 @@
+from django.apps import apps
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.http import HttpResponseRedirect
-from django.db.models.loading import get_model
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.template.context import RequestContext
@@ -10,6 +10,7 @@ from django.contrib import messages
 from attachments.models import Attachment
 from attachments.forms import AttachmentForm
 
+
 def add_url_for_obj(obj):
     return reverse('add_attachment', kwargs={
                         'app_label': obj._meta.app_label,
@@ -17,13 +18,14 @@ def add_url_for_obj(obj):
                         'pk': obj.pk
                     })
 
+
 @require_POST
 @login_required
 def add_attachment(request, app_label, module_name, pk,
                    template_name='attachments/add.html', extra_context={}):
 
     next = request.POST.get('next', '/')
-    model = get_model(app_label, module_name)
+    model = apps.get_model(app_label, module_name)
     if model is None:
         return HttpResponseRedirect(next)
     obj = get_object_or_404(model, pk=pk)
@@ -42,6 +44,7 @@ def add_attachment(request, app_label, module_name, pk,
         template_context.update(extra_context)
         return render_to_response(template_name, template_context,
                                   RequestContext(request))
+
 
 @login_required
 def delete_attachment(request, attachment_pk):
