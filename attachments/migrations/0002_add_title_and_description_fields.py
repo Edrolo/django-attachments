@@ -7,6 +7,7 @@ import attachments.models
 
 
 class Migration(migrations.Migration):
+    initial = True
 
     dependencies = [
         ('attachments', '0001_initial'),
