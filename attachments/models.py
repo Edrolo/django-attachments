@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 
 def attachment_upload(instance, filename):
@@ -32,13 +32,16 @@ class Attachment(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_attachments",
-        verbose_name=_('creator'), on_delete=models.SET(1)))
+        verbose_name=_('creator'), on_delete=models.SET(1))
     attachment_file = models.FileField(_('attachment'), upload_to=attachment_upload,
         max_length=200)
     created = models.DateTimeField(_('created'), auto_now_add=True)
     modified = models.DateTimeField(_('modified'), auto_now=True)
     title = models.CharField(_('title'), max_length=200, blank=True, default='')
     description = models.TextField(_('description'), max_length=1000, blank=True, default='')
+
+    show_to_students = models.BooleanField(_('Show to students'), default=True)
+    show_in_standard_package = models.BooleanField(_('Show in standard package'), default=True)
 
     class Meta:
         app_label = ugettext('attachments')
