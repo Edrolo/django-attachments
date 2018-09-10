@@ -1,10 +1,15 @@
+# -*- encoding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import Permission, User
 from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
 from django.test import TestCase
+
+try:
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import reverse
 
 from attachments.models import Attachment
 
@@ -55,7 +60,7 @@ class BaseTestCase(TestCase):
         })
 
         if not file_obj:
-            file_obj = SimpleUploadedFile("avatar.jpg", b"file content",
+            file_obj = SimpleUploadedFile("Ünicode Filename 🙂.jpg", b"file content",
                                           content_type="image/jpeg")
         return self.client.post(add_url, {'attachment_file': file_obj},
                                 follow=True)

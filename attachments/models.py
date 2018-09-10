@@ -3,10 +3,11 @@ from __future__ import unicode_literals
 import os
 
 from django.conf import settings
-from django.db import models
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
 
 def attachment_upload(instance, filename):
@@ -22,13 +23,14 @@ class AttachmentManager(models.Manager):
     def attachments_for_object(self, obj):
         object_type = ContentType.objects.get_for_model(obj)
         return self.filter(content_type__pk=object_type.id,
-                           object_id=obj.id)
+                           object_id=obj.pk)
 
 
+@python_2_unicode_compatible
 class Attachment(models.Model):
     objects = AttachmentManager()
 
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="created_attachments",
@@ -44,16 +46,18 @@ class Attachment(models.Model):
     show_in_standard_package = models.BooleanField(_('Show in standard package'), default=True)
 
     class Meta:
-        app_label = ugettext('attachments')
+        verbose_name = _("attachment")
+        verbose_name_plural = _("attachments")
         ordering = ['-created']
         permissions = (
             ('delete_foreign_attachments', _('Can delete foreign attachments')),
         )
 
-    def __unicode__(self):
-        return '{} attached {}'.format(
-            self.creator.get_username(),
-            self.attachment_file.name)
+    def __str__(self):
+        return _('{username} attached {filename}').format(
+            username=self.creator.get_username(),
+            filename=self.attachment_file.name
+        )
 
     @property
     def filename(self):

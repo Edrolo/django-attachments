@@ -33,15 +33,21 @@ Installation:
 5. Grant the user some permissions:
 
    * For **adding attachments** grant the user (or group) the permission
-     ``attachments.add_attachments``.
+     ``attachments.add_attachment``.
 
    * For **deleting attachments** grant the user (or group) the permission
-     ``attachments.delete_attachments``. This allows the user to delete their
+     ``attachments.delete_attachment``. This allows the user to delete their
      attachments only.
 
    * For **deleting foreign attachments** (attachments by other users) grant
      the user the permission ``attachments.delete_foreign_attachments``.
 
+6. Set ``DELETE_ATTACHMENTS_FROM_DISK`` to ``True`` if you want to remove
+   files from disk when Attachment objects are removed!
+
+7. Configure ``FILE_UPLOAD_MAX_SIZE`` (optional). This is the maximum size in
+   bytes before raising form validation errors. If not set there is no restriction
+   on file size.
 
 Mind that you serve files!
 ==========================
@@ -59,13 +65,23 @@ configuration this would look like::
 Tests
 =====
 
-Run the testsuite in your local environment using::
+Run the testsuite in your local environment using ``pipenv``::
 
-    $ python ./runtests.py
+    $ cd django-attachments/
+    $ pipenv install
+    $ pipenv run ./runtests.py
 
 Or use tox to test against various Django and Python versions::
 
     $ tox -r
+
+You can also invoke the test suite or other 'manage.py' commands by calling
+the ``django-admin`` tool with the test app settings::
+
+    $ cd django-attachments/
+    $ pipenv install
+    $ pipenv run django-admin.py migrate
+    $ pipenv run django-admin.py runserver
 
 Usage:
 ======
@@ -98,19 +114,24 @@ for your model objects in your frontend.
 
 1. ``get_attachments_for [object]``: Fetches the attachments for the given
    model instance. You can optionally define a variable name in which the attachment
-   list is stored in the template context. The default context variable name is
-   ``attachments`` Example::
+   list is stored in the template context (this is required in Django 1.8). If
+   you do not define a variable name, the result is printed instead.
 
    {% get_attachments_for entry as "attachments_list" %}
 
-2. ``attachment_form``: Renders a upload form to add attachments for the given
+2. ``attachments_count [object]``: Counts the attachments for the given
+   model instance and returns an int::
+
+   {% attachments_count entry %}
+
+3. ``attachment_form``: Renders a upload form to add attachments for the given
    model instance. Example::
 
     {% attachment_form [object] %}
 
    It returns an empty string if the current user is not logged in.
 
-3. ``attachment_delete_link``: Renders a link to the delete view for the given
+4. ``attachment_delete_link``: Renders a link to the delete view for the given
    *attachment*. Example::
 
     {% for att in attachments_list %}
@@ -129,6 +150,7 @@ Quick Example:
     {% load attachments_tags %}
     {% get_attachments_for entry as my_entry_attachments %}
 
+    <span>Object has {% attachments_count entry %} attachments</span>
     {% if my_entry_attachments %}
     <ul>
     {% for attachment in my_entry_attachments %}

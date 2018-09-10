@@ -4,19 +4,28 @@ services:
   - memcached
 
 python:
-  - 2.7
-  - 3.5
+  - "2.7"
+  - "3.5"
+  - "3.6"
 
 env:
   - DJANGO=1.8.*
   - DJANGO=1.9.*
+  - DJANGO=1.10.*
+  - DJANGO=1.11.*
+  - DJANGO=2.0.*
+
+matrix:
+  exclude:
+    - python: "2.7"
+      env: DJANGO=2.0.*
 
 before_install:
   - pip install codecov
 
 install:
-  - pip install django==$DJANGO
-  - pip install -e .
+  - pip install six django==$DJANGO
+  - pip install -e .[tests]
 
 script:
   - coverage run runtests.py

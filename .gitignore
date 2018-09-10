@@ -1,2 +1,5 @@
 attachments/tests/testapp/uploads/
-django_attachments.egg-info/
+*.egg-info/
+__pycache__
+*.pyc
+tests.db
