@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('attachments', '0001_initial'),
+        ('attachments', '0003_add_access_fields'),
     ]
 
     operations = [
