@@ -4,22 +4,27 @@ from django import forms
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from attachments.models import Attachment
+from .models import Attachment
 
 
 def validate_max_size(data):
-    if hasattr(settings, 'FILE_UPLOAD_MAX_SIZE') and \
-       data.size > settings.FILE_UPLOAD_MAX_SIZE:
+    if (
+        hasattr(settings, "FILE_UPLOAD_MAX_SIZE")
+        and data.size > settings.FILE_UPLOAD_MAX_SIZE
+    ):
         raise forms.ValidationError(
-            _('File exceeds maximum size of {size}').format(
-                size=filesizeformat(settings.FILE_UPLOAD_MAX_SIZE)))
+            _("File exceeds maximum size of {size}").format(
+                size=filesizeformat(settings.FILE_UPLOAD_MAX_SIZE)
+            )
+        )
 
-        
+
 class AttachmentForm(forms.ModelForm):
-    attachment_file = forms.FileField(label=_('Upload attachment'),
-                                      validators=[validate_max_size])
+    attachment_file = forms.FileField(
+        label=_("Upload attachment"), validators=[validate_max_size]
+    )
 
     class Meta:
         model = Attachment
