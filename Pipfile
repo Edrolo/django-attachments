@@ -4,9 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"e1839a8" = {path = ".", extras = ["tests"], editable = true}
+django-attachments = {editable = true,extras = ["test"],path = "."}
 
 [dev-packages]
+isort = "*"
+black = "*"
+coverage = "*"
 
-[requires]
-python_version = "3.6"
+[scripts]
+test = "pytest attachments/"
+cleanup = "sh -c \"black --line-length=80 --exclude='/(migrations)/' attachments && isort -rc attachments\""
+
+[pipenv]
+allow_prereleases = true

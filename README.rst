@@ -1,8 +1,15 @@
+.. image:: https://badge.fury.io/py/django-attachments.svg
+    :target: https://badge.fury.io/py/django-attachments
+
 .. image:: https://travis-ci.org/bartTC/django-attachments.svg?branch=master
     :target: https://travis-ci.org/bartTC/django-attachments
 
-.. image:: https://codecov.io/github/bartTC/django-attachments/coverage.svg?branch=master
-    :target: https://codecov.io/github/bartTC/django-attachments?branch=master
+.. image:: https://api.codacy.com/project/badge/Grade/e13db6df2a2148b08c662798642aa611
+    :alt: Codacy Badge
+    :target: https://app.codacy.com/app/bartTC/django-attachments
+
+.. image:: https://api.codacy.com/project/badge/Coverage/e13db6df2a2148b08c662798642aa611
+    :target: https://www.codacy.com/app/bartTC/django-attachments
 
 ==================
 django-attachments
@@ -30,7 +37,7 @@ Installation:
 
     ./manage.py migrate
 
-5. Grant the user some permissions:
+4. Grant the user some permissions:
 
    * For **adding attachments** grant the user (or group) the permission
      ``attachments.add_attachment``.
@@ -42,10 +49,10 @@ Installation:
    * For **deleting foreign attachments** (attachments by other users) grant
      the user the permission ``attachments.delete_foreign_attachments``.
 
-6. Set ``DELETE_ATTACHMENTS_FROM_DISK`` to ``True`` if you want to remove
+5. Set ``DELETE_ATTACHMENTS_FROM_DISK`` to ``True`` if you want to remove
    files from disk when Attachment objects are removed!
 
-7. Configure ``FILE_UPLOAD_MAX_SIZE`` (optional). This is the maximum size in
+6. Configure ``FILE_UPLOAD_MAX_SIZE`` (optional). This is the maximum size in
    bytes before raising form validation errors. If not set there is no restriction
    on file size.
 
@@ -68,8 +75,8 @@ Tests
 Run the testsuite in your local environment using ``pipenv``::
 
     $ cd django-attachments/
-    $ pipenv install
-    $ pipenv run ./runtests.py
+    $ pipenv install --dev
+    $ pipenv run pytest attachments/
 
 Or use tox to test against various Django and Python versions::
 
@@ -79,8 +86,8 @@ You can also invoke the test suite or other 'manage.py' commands by calling
 the ``django-admin`` tool with the test app settings::
 
     $ cd django-attachments/
-    $ pipenv install
-    $ pipenv run django-admin.py migrate
+    $ pipenv install --dev
+    $ pipenv run test
     $ pipenv run django-admin.py runserver
 
 Usage:

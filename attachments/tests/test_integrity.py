@@ -2,11 +2,6 @@ from django.core.management import call_command
 from django.test import TestCase
 from six import StringIO
 
-try:
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import reverse
-
 
 class IntegrityTestCase(TestCase):
     """
@@ -18,5 +13,7 @@ class IntegrityTestCase(TestCase):
         Make sure all model changes are reflected with Django migrations.
         """
         output = StringIO()
-        call_command('makemigrations', '--dry-run', interactive=False, stdout=output)
-        self.assertTrue('No changes detected' in output.getvalue())
+        call_command(
+            "makemigrations", "--dry-run", interactive=False, stdout=output
+        )
+        self.assertTrue("No changes detected" in output.getvalue())
