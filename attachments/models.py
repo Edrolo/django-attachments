@@ -37,7 +37,7 @@ class Attachment(models.Model):
         settings.AUTH_USER_MODEL,
         related_name="created_attachments",
         verbose_name=_("creator"),
-        on_delete=models.CASCADE,
+        on_delete=models.SET(1),
     )
     attachment_file = models.FileField(
         _("attachment"), upload_to=attachment_upload
