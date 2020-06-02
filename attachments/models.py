@@ -40,7 +40,7 @@ class Attachment(models.Model):
         on_delete=models.SET(1),
     )
     attachment_file = models.FileField(
-        _("attachment"), upload_to=attachment_upload
+        _("attachment"), upload_to=attachment_upload, max_length=200
     )
     created = models.DateTimeField(_("created"), auto_now_add=True)
     modified = models.DateTimeField(_("modified"), auto_now=True)
@@ -65,8 +65,7 @@ class Attachment(models.Model):
 
     def __str__(self):
         return _("{username} attached {filename}").format(
-            username=self.creator.get_username(),
-            filename=self.attachment_file.name,
+            username=self.creator.get_username(), filename=self.attachment_file.name
         )
 
     @property
