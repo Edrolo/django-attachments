@@ -54,6 +54,7 @@ class Attachment(models.Model):
     show_in_standard_package = models.BooleanField(
         _("Show in standard package"), default=True
     )
+    requires_watermark = models.BooleanField(_("Requires Watermark"), default=False)
 
     class Meta:
         verbose_name = _("attachment")
