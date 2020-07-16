@@ -12,7 +12,11 @@ from six import python_2_unicode_compatible
 
 def attachment_upload(instance, filename):
     """Stores the attachment in a "per module/appname/primary key" folder"""
-    return "attachments/{app}_{model}/{pk}/{filename}".format(
+    tmpl = "attachments/{app}_{model}/{pk}/{filename}"
+    if instance.requires_watermark:
+        tmpl = "watermarkable_attachments/{app}_{model}/{pk}/{filename}"
+
+    return tmpl.format(
         app=instance.content_object._meta.app_label,
         model=instance.content_object._meta.object_name.lower(),
         pk=instance.content_object.pk,

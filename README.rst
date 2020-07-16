@@ -56,6 +56,9 @@ Installation:
    bytes before raising form validation errors. If not set there is no restriction
    on file size.
 
+7. TODO: Set ``ATTACHMENT_STORAGE`` to a ``Storage`` class string to use for persisting stuff
+   
+
 Mind that you serve files!
 ==========================
 
