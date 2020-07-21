@@ -223,3 +223,17 @@ class ViewTestCase(BaseTestCase):
                 self.assertEqual(Attachment.objects.count(), 0)
                 # NOTE: we don't assert the file path here because
                 # the mock which raises will not actually delete it
+
+    def test_requires_watermark_uploads_to_private_location(self):
+        self.client.login(**self.cred_jon)
+        self._upload_testfile(file_obj=None, opts={'requires_watermark': True})
+        self.assertEqual(Attachment.objects.count(), 1)
+        att = Attachment.objects.attachments_for_object(self.obj)
+        self.assertTrue(att[0].attachment_file.name.startswith('private_attachments'))
+
+    def test_without_requires_watermark_uploads_to_standard_location(self):
+        self.client.login(**self.cred_jon)
+        self._upload_testfile(file_obj=None, opts={'requires_watermark': False})
+        self.assertEqual(Attachment.objects.count(), 1)
+        att = Attachment.objects.attachments_for_object(self.obj)
+        self.assertTrue(att[0].attachment_file.name.startswith('attachments'))

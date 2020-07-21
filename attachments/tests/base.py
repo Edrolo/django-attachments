@@ -41,10 +41,11 @@ class BaseTestCase(TestCase):
 
         self.obj = TestModel.objects.create(title="My first test item")
 
-    def _upload_testfile(self, file_obj=None):
+    def _upload_testfile(self, file_obj=None, opts=None):
         """
         Uploads a sample file for the given user.
         """
+        opts = {} if opts == None else opts
         add_url = reverse(
             "attachments:add",
             kwargs={
@@ -61,5 +62,5 @@ class BaseTestCase(TestCase):
                 content_type="image/jpeg",
             )
         return self.client.post(
-            add_url, {"attachment_file": file_obj}, follow=True
+            add_url, {"attachment_file": file_obj, **opts}, follow=True
         )

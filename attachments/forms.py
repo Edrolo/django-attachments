@@ -28,7 +28,7 @@ class AttachmentForm(forms.ModelForm):
 
     class Meta:
         model = Attachment
-        fields = ("attachment_file", "title", "description")
+        fields = ("attachment_file", "title", "description", "requires_watermark")
 
     def save(self, request, obj, *args, **kwargs):
         self.instance.creator = request.user

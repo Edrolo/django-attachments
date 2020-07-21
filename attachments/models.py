@@ -11,16 +11,22 @@ from six import python_2_unicode_compatible
 
 
 def attachment_upload(instance, filename):
-    """Stores the attachment in a "per module/appname/primary key" folder"""
-    tmpl = "attachments/{app}_{model}/{pk}/{filename}"
-    if instance.requires_watermark:
-        tmpl = "watermarkable_attachments/{app}_{model}/{pk}/{filename}"
+    """
+    Stores the attachment in a "per module/appname/primary key" folder
+    Attachments that need to be private (i.e. requires_watermark
+    attachments), go in the private_attachments folder
 
-    return tmpl.format(
+    """
+    attachments_prefix = "attachments"
+    if instance.requires_watermark:
+        attachments_prefix = "private_attachments"
+        
+    return "{attachments_prefix}/{app}_{model}/{pk}/{filename}".format(
         app=instance.content_object._meta.app_label,
         model=instance.content_object._meta.object_name.lower(),
         pk=instance.content_object.pk,
         filename=filename,
+        attachments_prefix=attachments_prefix,
     )
 
 

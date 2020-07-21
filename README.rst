@@ -55,8 +55,6 @@ Installation:
 6. Configure ``FILE_UPLOAD_MAX_SIZE`` (optional). This is the maximum size in
    bytes before raising form validation errors. If not set there is no restriction
    on file size.
-
-7. TODO: Set ``ATTACHMENT_STORAGE`` to a ``Storage`` class string to use for persisting stuff
    
 
 Mind that you serve files!
@@ -70,6 +68,10 @@ configuration this would look like::
     <Location /site_media/attachments>
         AddType text/plain .html .htm .shtml .php .php5 .php4 .pl .cgi
     </Location>
+
+Private attachments (e.g. attachments marked as
+``requires_watermark``) are kept in the ``private_attachments``
+folder. Make sure this is not public
 
 
 Tests
